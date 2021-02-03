@@ -1,0 +1,23 @@
+server:
+  port: 8001
+
+spring:
+  application:
+    name: cloud-provider-hystrix-payment
+
+eureka:
+  client:
+    register-with-eureka: true   #是否将自己注册到注册中心,集群必须设置为true配合ribbon
+    fetch-registry: true    #是否从服务端抓取已有的注册信息
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka
+#      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+
+
+#设置feign客户端超时时间(OpenFeign 默认支持ribbon) ，这个不开直接就报错了，哈哈
+#客户端已调用超时就报错，不知道是不是这个的原因
+ribbon:
+  #指的是建立连接所用时间,适用于网络状况正常情况下,两端连接所用时间，这里默认为一秒
+  ReadTimeout: 5000
+  #指的是连接建立后,从服务器获取到可用资源所用时间
+  ConnectTimeout: 5000

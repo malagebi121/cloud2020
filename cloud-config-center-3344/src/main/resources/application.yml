@@ -1,0 +1,52 @@
+server:
+  port: 3344
+
+spring:
+  application:
+    name: cloud-config-center #注册进Eureka服务器的微服务名
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/malagebi121/springcloud-config.git #github上仓库地址
+          search-paths:
+            # 搜索目录
+            - springcloud-config
+      #读取分支
+      label: dev
+
+  # rabbitmq相关配置 15672是web管理界面的端口; 5672 是MQ访问的端口
+  rabbitmq:
+    host: 47.110.76.191
+    port: 5672
+    username: guest
+    password: guest
+
+#服务注册到Eureka地址
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka
+
+
+#######
+##  新添加bus总线支持
+#######
+#3366 需要.   这个好像过时了，会不支持bus
+# rabbitmq 相关配置,暴露bus刷新配置的断点
+#management:
+#  endpoints: #暴露bus刷新配置的断点
+#    web:
+#      exposure:
+#        include: "bus-refresh"
+
+
+#用这个才行    （还是有点问题，刷新了不起作用，很烦）
+management:
+  endpoints:  # 暴露bus 接口 ，否则 更新 refresh 没用的
+    web:
+      exposure:    # expose: "*" 已过期
+        include: "*"
+  endpoint:
+    bus-refresh:
+      enabled: true
